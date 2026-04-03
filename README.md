@@ -1,5 +1,7 @@
 # mate-rov-2026-crab-detection
-library for providing crab-detection model for task 2.1 in MATE-ROV-2026. the task includes finding the number of invasive crab species (European Green Crab) among two other species (Native Rock Crab and Native Jonah Crab) in an image that contains multiple resized and reoriented instances of the 3 crab species. Note that the exact same 3 images for each species which means we might detect using a YOLO model or a SIFT/ORB feature matcher(still measuring which is better). This library's goal is to provide an easy api for detection and NOT to build a ROS node. Building the ros node that takes the feed from the camera and delivers it to the GUI will be the responsiblity of the ROV workspace repository. The api is detailed below. After completing the solution in the repo we should tag the latest commit to be used as a mark when we add this project as a dependency to the ROV workspace.
+library for providing crab-detection model for task 2.1 in MATE-ROV-2026. the task includes finding the number of invasive crab species (European Green Crab) among two other species (Native Rock Crab and Native Jonah Crab) in an image that contains multiple resized and reoriented instances of the 3 crab species. Note that the exact same 3 images for each species which means we might detect using a YOLO model or a SIFT/ORB feature matcher(still measuring which is better).\
+This library's goal is to provide an easy api for detection and NOT to build a ROS node. Building the ros node that takes the feed from the camera and delivers it to the GUI will be the responsiblity of the ROV workspace repository.\
+The api is detailed below. After completing the solution in the repo we should tag the latest commit to be used as a mark when we add this project as a dependency to the ROV workspace.
 
 ## Required tools for development
 
@@ -45,16 +47,10 @@ NOTE that the API is still not determined and the above sample is just an exampl
 - the output image should have the number of detections written on it on the top right or top left.
 - the detections should be for only 1 crab type.
 - the detector should know how to download the trained .pt model by itself from Gdrive or Github or however it may want but it can't rely on a pre-existing model to use.
-- the detector should cache the model in a an absolute path not a relative one since it will be used as a library. A good place for cachining is "~/.cache/crab_detector_rov_2026". you can always have access that directory using the following python:
-```python
-from pathlib import Path
-cache_dir = Path.home() / ".cache/crab_detection_rov_2026"
-cache_dir.mkdir(exist_ok=True)  # create if it doesn't exist
-```
+- the detector should cache the model in a an absolute path not a relative one since it will be used as a library. A good place for cachining is "~/.cache/crab_detector_rov_2026". you can always have access that directory using the code in utils.py that uses `pathlib`.
+- any training or testing code shouldn't be inside src to avoid shipping it with the library. so if anyone still wants to train then he/she should either create a `./training` directory that is self enclosed or just a `./scripts/train.py` and write how to invoke it in the Justfile using `just train`.
 
 ## TODOs for later
 - we still need to implement actual business logic
-- split the __init__.py file into multiple other files (refactor)
-- write __all__ to expose only the public API (single function)
 - tests should be written for each image inside `tests/images`
 - sanity check script should be written inside `scripts/laptop_webcam_detect.py` to test it freely.
