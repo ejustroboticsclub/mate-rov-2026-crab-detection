@@ -27,8 +27,5 @@ test-all:
 
 [doc('dry run of git clean. use clean force to delete')]
 clean mode="dry":
-    if [ "{{mode}}" = "force" ]; then \
-        git clean -fxfd -e '*venv' -e '.env'; \
-    else \
-        git clean -fxfd -e '*venv' -e '.env' --dry-run; \
-    fi
+    git clean -fxfd -e '*venv' -e '.env' {{ if mode == "force" { "" } else { "--dry-run" } }}
+
