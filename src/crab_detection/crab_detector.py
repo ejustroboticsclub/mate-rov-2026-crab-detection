@@ -1,5 +1,6 @@
 from .utils import get_model
 
+
 class CrabDetector:
     # should initialize the required detection model even if download is required
     def __init__(self):
@@ -9,4 +10,3 @@ class CrabDetector:
     # TODO: annotate your return types clearly
     def detect(self) -> tuple:
         raise NotImplementedError
-

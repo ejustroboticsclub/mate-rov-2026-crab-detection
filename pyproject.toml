@@ -19,6 +19,8 @@ build-backend = "uv_build"
 dev = [
     "pytest==9.0.2",
     "pytest-cov",
+    "ruff>=0.15.9",
+    "ty>=0.0.28",
 ]
 
 [tool.pytest.ini_options]
