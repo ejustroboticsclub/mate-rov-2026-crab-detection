@@ -1,17 +1,12 @@
 from ultralytics import YOLO
 from pathlib import Path
-
+import gdown 
 CACHE_DIR = Path.home() / ".cache/crab_detection_rov_2026"
-MODEL_NAME = "trained_example_name_v1.pt"  # make sure that each different model version is named so we can always change as we like from here
+MODEL_NAME = "european-crab-detection-model_v2.pt"  # make sure that each different model version is named so we can always change as we like from here
 DEFAULT_MODEL_PATH = CACHE_DIR / MODEL_NAME
 
 
-# TODO: upload the model and add its url
-def _todo(msg: str):
-    raise NotImplementedError(msg)
-
-
-MODEL_URL: str = _todo("MODEL_URL is not set yet")
+MODEL_URL = "https://drive.google.com/uc?id=1mlyFzMtdtb8WPMoMTdU25y_tRrRkafAX"
 
 
 def get_model(path: str | None = None) -> YOLO:
@@ -31,5 +26,11 @@ def get_model(path: str | None = None) -> YOLO:
 
 
 def _download_model(model_name: str) -> None:
-    print(f"-->Downloading model {model_name} from {MODEL_URL} for crab detection")
-    raise NotImplementedError
+    print(f"--> Downloading model {model_name} from {MODEL_URL} for crab detection")
+
+    gdown.download(
+        url=MODEL_URL,
+        output=str(DEFAULT_MODEL_PATH),
+        quiet=False
+    )
+    print("Model downloaded successfully")

@@ -8,6 +8,8 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
+    "gdown>=5.2.1",
+    "opencv-python>=4.13.0.92",
     "ultralytics>=8.4.33",
 ]
 
@@ -28,3 +30,7 @@ addopts = "--cov=crab_detection" #include all packages under src directory
 testpaths = [
     "tests",
 ]
+
+[tool.ruff]
+lint.extend-select = ["I", "UP"]
+fix = true
