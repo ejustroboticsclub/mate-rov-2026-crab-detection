@@ -2,11 +2,11 @@ from ultralytics import YOLO
 from pathlib import Path
 import gdown 
 CACHE_DIR = Path.home() / ".cache/crab_detection_rov_2026"
-MODEL_NAME = "european-crab-detection-model_v2.pt"  # make sure that each different model version is named so we can always change as we like from here
+MODEL_NAME = "crab-detection-model_v4.pt"  # make sure that each different model version is named so we can always change as we like from here
 DEFAULT_MODEL_PATH = CACHE_DIR / MODEL_NAME
 
 
-MODEL_URL = "https://drive.google.com/uc?id=1mlyFzMtdtb8WPMoMTdU25y_tRrRkafAX"
+MODEL_URL = "https://drive.google.com/drive/folders/1UxaCf3HxhgkZ9fvodt5nDRJ23EhDjnMP?usp=drive_link"
 
 
 def get_model(path: str | None = None) -> YOLO:

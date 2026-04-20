@@ -5,46 +5,63 @@ import cv2
 class CrabDetector:
     def __init__(self):
         self.model = get_model()
-        self.TARGET_CLASS = "green_crab"
+        self.TARGET_CLASSES = ["green-crab", "rock-crab", "jonah-crab"]
+        self.CONF_THRESHOLD = 0.5
+        self.CLASS_COLORS = {
+        "green-crab": (0, 255, 0),
+        "rock-crab": (255, 0, 0),
+        "jonah-crab": (0, 0, 255)
+        }
+        self.totalCount = 0
         self.OUTPUT_DIR = "tests/output"
 
         os.makedirs(self.OUTPUT_DIR, exist_ok=True)
 
-    def detect(self, imagePath) -> tuple:
-        results = self.model.predict(source=imagePath, save=False, verbose=False)
-        
-        img = cv2.imread(imagePath)
-        if img is None:
-            return None, 0
-            
-        h, w, _ = img.shape
-        total_count = 0
-        font_scale = w / 1000 
-        thickness = max(1, int(font_scale * 2))
+    def detect(self, imgPath) -> tuple:
+        frame = cv2.imread(imgPath)
+        results = YOLO.predict(frame)
+        totalCount = 0 
+        stats = {CLS : 0 for CLS in self.TARGET_CLASSES}
+        for result in results: 
+            for box, cls, conf in zip(result.boxes.xyxy,result.boxes.cls,result.boxes.conf):
+                if conf < self.CONF_THRESHOLD:                    
+                    continue
 
-        for result in results:
-            for box, cls, conf in zip(result.boxes.xyxy, result.boxes.cls, result.boxes.conf):
-                class_name = self.model.names[int(cls)]
+                class_name = model.names[int(cls)]
+                if class_name in self.TARGET_CLASSES: 
+                    self.totalCount += 1 
+                    stats[class_name] += 1 
 
-                if class_name == self.TARGET_CLASS:
-                    total_count += 1
-                    x1, y1, x2, y2 = map(int, box)
-                    
-                    cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
-                    
-                    label = f"{class_name} {conf:.2f}"
-                    cv2.putText(img, label, (x1, max(0, y1 - 10)), 
-                                cv2.FONT_HERSHEY_SIMPLEX, font_scale * 0.5, (0, 255, 0), thickness)
+                x1, y1, x2, y2 = map(int(box))
+                label = f"{class_name} {conf:.2f}"
+                color = self.CLASS_COLORS.get(class_name, (0, 255, 255))
+                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                cv2.putText(frame,
+                            label,
+                            (x1, max(0, y1 - 10)),
+                            cv2.FONT_HERSHEY_SIMPLEX,
+                            0.7,
+                            color,
+                            2
+                            )
+                
+                cv2.putText(
+                    frame,
+                    f"Green Crabs: {stats['green-crab']}",
+                    (20, frame.shape[0] - 30),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    1.2,
+                    (0, 255, 0),
+                    3
+                )
 
-        count_text = f"Total {self.TARGET_CLASS}: {total_count}"
-        cv2.putText(img, count_text, (20, h - 20), 
-                    cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0, 255, 0), thickness + 1)
-
-        base_name = os.path.splitext(os.path.basename(imagePath))[0]
-        outputPath = os.path.join(self.OUTPUT_DIR, f"{base_name}_detection.png")
-        cv2.imwrite(outputPath, img)
-
-        return img, total_count
-    
-# detector = CrabDetector()
-# image, count = detector.detect("SAMPLE_PATH")
+                cv2.putText(
+                    frame,
+                    f"Total: {self.totalCount}",
+                    (20, 50),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    1,
+                    (255, 255, 255),
+                    2
+                )               
+        return (frame,self.totalCount)       
