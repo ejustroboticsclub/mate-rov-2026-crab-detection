@@ -1,6 +1,8 @@
-from ultralytics import YOLO
 from pathlib import Path
-import gdown 
+
+import gdown
+from ultralytics import YOLO
+
 CACHE_DIR = Path.home() / ".cache/crab_detection_rov_2026"
 MODEL_NAME = "crab-detection-model_v4.pt"  # make sure that each different model version is named so we can always change as we like from here
 DEFAULT_MODEL_PATH = CACHE_DIR / MODEL_NAME
@@ -28,9 +30,5 @@ def get_model(path: str | None = None) -> YOLO:
 def _download_model(model_name: str) -> None:
     print(f"--> Downloading model {model_name} from {MODEL_URL} for crab detection")
 
-    gdown.download(
-        url=MODEL_URL,
-        output=str(DEFAULT_MODEL_PATH),
-        quiet=False
-    )
+    gdown.download(url=MODEL_URL, output=str(DEFAULT_MODEL_PATH), quiet=False)
     print("Model downloaded successfully")
