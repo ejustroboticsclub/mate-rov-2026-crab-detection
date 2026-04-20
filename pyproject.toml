@@ -30,3 +30,7 @@ addopts = "--cov=crab_detection" #include all packages under src directory
 testpaths = [
     "tests",
 ]
+
+[tool.ruff]
+lint.extend-select = ["I", "UP"]
+fix = true
