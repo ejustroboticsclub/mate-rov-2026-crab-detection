@@ -6,7 +6,7 @@ from .utils import get_model
 
 
 class CrabDetector:
-    def __init__(self):
+    def __init__(self,output_dir="./output"):
         self.model = get_model()
         self.TARGET_CLASSES = ["green-crab", "rock-crab", "jonah-crab"]
         self.CONF_THRESHOLD = 0.5
@@ -16,7 +16,7 @@ class CrabDetector:
             "jonah-crab": (0, 0, 255),
         }
         self.totalCount = 0
-        self.OUTPUT_DIR = "tests/output"
+        self.OUTPUT_DIR = output_dir 
 
         os.makedirs(self.OUTPUT_DIR, exist_ok=True)
 
@@ -28,15 +28,14 @@ class CrabDetector:
             for box, cls, conf in zip(
                 result.boxes.xyxy, result.boxes.cls, result.boxes.conf
             ):
-                if conf < self.CONF_THRESHOLD:
+                class_name = self.model.names[int(cls)]
+                if conf < self.CONF_THRESHOLD or not class_name in self.TARGET_CLASSES:
                     continue
 
-                class_name = self.model.names[int(cls)]
-                if class_name in self.TARGET_CLASSES:
-                    self.totalCount += 1
-                    stats[class_name] += 1
-
-                x1, y1, x2, y2 = map(int(box))
+                self.totalCount += 1
+                stats[class_name] += 1
+                
+                x1, y1, x2, y2 = map(int,box)
                 label = f"{class_name} {conf:.2f}"
                 color = self.CLASS_COLORS.get(class_name, (0, 255, 255))
                 cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
@@ -50,7 +49,7 @@ class CrabDetector:
                     2,
                 )
 
-                cv2.putText(
+        cv2.putText(
                     frame,
                     f"Green Crabs: {stats['green-crab']}",
                     (20, frame.shape[0] - 30),
@@ -60,7 +59,7 @@ class CrabDetector:
                     3,
                 )
 
-                cv2.putText(
+        cv2.putText(
                     frame,
                     f"Total: {self.totalCount}",
                     (20, 50),
@@ -69,4 +68,8 @@ class CrabDetector:
                     (255, 255, 255),
                     2,
                 )
-        return (frame, self.totalCount)
+        return frame, self.totalCount
+    
+detector = CrabDetector()
+image,count = detector.detect("src/crab_detection/sample_3.jpeg")
+print("Done")
