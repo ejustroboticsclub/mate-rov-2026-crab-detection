@@ -69,7 +69,4 @@ class CrabDetector:
                     2,
                 )
         return frame, self.totalCount
-    
-detector = CrabDetector()
-image,count = detector.detect("src/crab_detection/sample_3.jpeg")
-print("Done")
+
