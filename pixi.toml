@@ -27,10 +27,10 @@ uv = "*"
 albumentations = ">=2.0.8,<3"
 ultralytics = ">=8.4.41,<9"
 gdown = ">=6.0.0,<7"
-pytorch-gpu = "*"
-torchvision = "*"
-# torchvision = "*"
-# rich = "13.9.*"
+
+[pypi-dependencies]
+torch = ">=2.11.0, <3"
+torchvision = ">=0.26.0, <0.27"
 
 # [package.build.config]
 # ignore-pypi-mapping = false  # Enable automatic PyPI-to-conda mapping
