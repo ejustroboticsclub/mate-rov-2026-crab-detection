@@ -3,6 +3,9 @@ channels = ["https://prefix.dev/conda-forge"]
 platforms = ["linux-64" ]
 preview = ["pixi-build"]
 
+[system-requirements]
+cuda = "12.8"
+
 [dependencies] 
 crab-detection = { path = "." }
 
@@ -24,6 +27,9 @@ uv = "*"
 albumentations = ">=2.0.8,<3"
 ultralytics = ">=8.4.41,<9"
 gdown = ">=6.0.0,<7"
+pytorch-gpu = "*"
+torchvision = "*"
+# torchvision = "*"
 # rich = "13.9.*"
 
 # [package.build.config]
