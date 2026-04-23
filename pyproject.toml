@@ -8,10 +8,10 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
-    "albumentations>=2.0.8",
-    "gdown>=5.2.1",
-    "opencv-python>=4.13.0.92",
-    "ultralytics>=8.4.33",
+    # "albumentations>=2.0.8",
+    "gdown",
+    "opencv-python",
+    "ultralytics",
 ]
 
 [build-system]
