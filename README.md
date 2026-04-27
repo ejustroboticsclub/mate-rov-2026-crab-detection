@@ -42,7 +42,7 @@ from crab_detection import CrabDetector
 crab_detector = CrabDetector() # installs required setup including downloading trained yolo model if Required
 image,num_crab = crab_detector.detect(input_image) # takes camera image as input and returns annotated image and number of detections
 ```
-NOTE that the API is still not determined and the above sample is just an example of what could be done.
+NOTE that the API is flexible and the above sample is just an example of what could be the output.
 ### important points to mention:
 - you can assume that the input image is a np.ndarray or a format that the yolo model is able to process.
 - the output image should have the number of detections written on it on the top right or top left.
@@ -51,7 +51,3 @@ NOTE that the API is still not determined and the above sample is just an exampl
 - the detector should cache the model in a an absolute path not a relative one since it will be used as a library. A good place for cachining is "~/.cache/crab_detector_rov_2026". you can always have access that directory using the code in utils.py that uses `pathlib`.
 - any training or testing code shouldn't be inside src to avoid shipping it with the library. so if anyone still wants to train then he/she should either create a `./training` directory that is self enclosed or just a `./scripts/train.py` and write how to invoke it in the Justfile using `just train`.
 
-## TODOs for later
-- we still need to implement actual business logic
-- tests should be written for each image inside `tests/images`
-- sanity check script should be written inside `scripts/laptop_webcam_detect.py` to test it freely.
